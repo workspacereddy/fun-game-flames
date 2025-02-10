@@ -96,34 +96,25 @@
     <h2 id="result"></h2>
     <div class="heart"></div>
     <script>
-        function removeCommonLetters(name1, name2) {
-            let arr1 = name1.toLowerCase().replace(/\s/g, '').split('');
-            let arr2 = name2.toLowerCase().replace(/\s/g, '').split('');
-            arr1.forEach(char => {
-                let index = arr2.indexOf(char);
-                if (index !== -1) {
-                    arr2.splice(index, 1);
-                    arr1.splice(arr1.indexOf(char), 1);
-                }
-            });
-            return arr1.length + arr2.length;
-        }
-        function flamesResult(count) {
-            let flames = ["Friends", "Lovers", "Affection", "Marriage", "Enemies", "Siblings"];
-            let index = 0;
-            while (flames.length > 1) {
-                index = (index + count - 1) % flames.length;
-                flames.splice(index, 1);
-            }
-            return flames[0];
-        }
-        function playFlames() {
+        async function playFlames() {
             let name1 = document.getElementById("name1").value.trim();
             let name2 = document.getElementById("name2").value.trim();
+            
             if (name1 && name2) {
-                let count = removeCommonLetters(name1, name2);
-                let result = flamesResult(count);
-                document.getElementById("result").innerText = `Relationship: ${result}`;
+                try {
+                    // Make an API call to the backend
+                    const response = await fetch('https://your-backend-url/render-api', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name1, name2 }),
+                    });
+                    const result = await response.json();
+                    document.getElementById("result").innerText = `Relationship: ${result.relationship}`;
+                } catch (error) {
+                    document.getElementById("result").innerText = "Error connecting to backend!";
+                }
             } else {
                 document.getElementById("result").innerText = "Please enter both names!";
             }
