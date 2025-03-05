@@ -100,7 +100,8 @@
         // Initialize Supabase
         const SUPABASE_URL = "https://hfvatxvhjwyjtzglqmlp.supabase.co"; // Replace with your Supabase project URL
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmdmF0eHZoand5anR6Z2xxbWxwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDExNDg3OTksImV4cCI6MjA1NjcyNDc5OX0.orocikotAAvVvnNHUIcu76Xw9D2bi16o0_Hnhc_qeMY"; // Replace with your Supabase anon key
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        var supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     
         function removeCommonLetters(name1, name2) {
             let arr1 = name1.toLowerCase().replace(/\s/g, '').split('');
