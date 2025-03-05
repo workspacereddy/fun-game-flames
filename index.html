@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FLAMES Game</title>
     <style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -96,6 +97,11 @@
     <h2 id="result"></h2>
     <div class="heart"></div>
     <script>
+        // Initialize Supabase
+        const SUPABASE_URL = "https://hfvatxvhjwyjtzglqmlp.supabase.co"; // Replace with your Supabase project URL
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhmdmF0eHZoand5anR6Z2xxbWxwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDExNDg3OTksImV4cCI6MjA1NjcyNDc5OX0.orocikotAAvVvnNHUIcu76Xw9D2bi16o0_Hnhc_qeMY"; // Replace with your Supabase anon key
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
         function removeCommonLetters(name1, name2) {
             let arr1 = name1.toLowerCase().replace(/\s/g, '').split('');
             let arr2 = name2.toLowerCase().replace(/\s/g, '').split('');
@@ -108,6 +114,7 @@
             });
             return arr1.length + arr2.length;
         }
+    
         function flamesResult(count) {
             let flames = ["Friends", "Lovers", "Affection", "Marriage", "Enemies", "Siblings"];
             let index = 0;
@@ -117,17 +124,31 @@
             }
             return flames[0];
         }
-        function playFlames() {
+    
+        async function playFlames() {
             let name1 = document.getElementById("name1").value.trim();
             let name2 = document.getElementById("name2").value.trim();
+            
             if (name1 && name2) {
                 let count = removeCommonLetters(name1, name2);
                 let result = flamesResult(count);
                 document.getElementById("result").innerText = `Relationship: ${result}`;
+    
+                // Store data in Supabase
+                const { data, error } = await supabase
+                    .from("flames_game")
+                    .insert([{ name1, name2, result }]);
+    
+                if (error) {
+                    console.error("Error saving data:", error.message);
+                } else {
+                    console.log("Data saved successfully:", data);
+                }
             } else {
                 document.getElementById("result").innerText = "Please enter both names!";
             }
         }
     </script>
+
 </body>
 </html>
